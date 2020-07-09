@@ -100,9 +100,7 @@ class to_Inspectionsheet:
             bags = self.result
             qty_result = self.bag_qty * (bags + 1)
             self.str_cal3 = str(bags) + "×" + str(self.bag_qty) + "=" + str(qty_result)
-
             self.str_cal2 = ''
-
             return self.str_cal1, self.str_cal2, self.str_cal3, qty_result
 
         else:
@@ -126,7 +124,6 @@ class to_Inspectionsheet:
             no_of_bags = int(no_of_bags)
             cal_box_qty1 = str(bag_qty) + "個/袋" + "×" + str(no_of_bags) + "袋" + "=" + str(box1) + "個/ケース"
             cal_box_qty2 = ''
-
             return cal_box_qty1, cal_box_qty2
 
         else:
@@ -136,7 +133,6 @@ class to_Inspectionsheet:
             no_of_bags2 = int(box2) / int(bag_qty)
             no_of_bags2 = int(no_of_bags2)
             cal_box_qty2 = str(bag_qty) + "個/袋" + "×" + str(no_of_bags2) + "袋" + "=" + str(box2) + "個/ケース"
-
             return cal_box_qty1, cal_box_qty2
 
     def cal_ship_qty(self, box1, box2, qty):
@@ -145,7 +141,6 @@ class to_Inspectionsheet:
             ship_qty1 = int(no_of_carton) * int(box1)
             cal_ship_qty1 = str(box1) + "個/ケース" + "×" + str(no_of_carton) + "ケース" + "=" + str(ship_qty1) + "個"
             cal_ship_qty2 = ''
-
             return cal_ship_qty1, cal_ship_qty2
 
         else:
@@ -154,5 +149,4 @@ class to_Inspectionsheet:
             ship_qty2 = 1 * int(box2)
             cal_ship_qty1 = str(box1) + "個/ケース" + "×" + str(no_of_carton) + "ケース" + "=" + str(ship_qty1) + "個"
             cal_ship_qty2 = str(box2) + "個/ケース" + "×" + "1" + "ケース" + "=" + str(ship_qty2) + "個"
-
             return cal_ship_qty1, cal_ship_qty2

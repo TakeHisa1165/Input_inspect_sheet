@@ -8,6 +8,7 @@ import w_csv
 import xlwings as xw
 import input_to_inspectsheet
 
+
 class InputGui:
     """
     検査成績書入力用フォーム表示
@@ -68,7 +69,6 @@ class InputGui:
             if event == "実行":
                 value_dict = values
 
-
                 if values["送る"]:
                     value_dict["send"] = "送る"
 
@@ -79,7 +79,6 @@ class InputGui:
                 iti = input_to_inspectsheet.to_Inspectionsheet(value_dict, sheet=self.data_sheet)
                 iti.inpput_data()
 
-
             if event == "Excelファイル選択":
                 sf = SelectFile()
                 sf.select_file()
@@ -87,8 +86,8 @@ class InputGui:
             if event == '途中保存':
                 print('test')
 
-
         window.close()
+
 
 class SelectFile:
     def __init__(self):
@@ -117,7 +116,9 @@ class SelectFile:
                 print(path_dict)
                 wcsv = w_csv.WriteCsv()
                 wcsv.write_csv(path_dict=path_dict)
+                sg.popup_ok('原紙ファイルの設定が完了しました。\nアプリを再起動してください。')
                 sys.exit()
+
 
 if __name__ == '__main__':
     a = SelectFile()

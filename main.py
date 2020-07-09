@@ -9,6 +9,7 @@ import r_csv
 rcsv = r_csv.ReadCsv()
 file_path = rcsv.read_csv()
 
+
 # GUI起動
 app = gui.InputGui(file_path)
 app.gui()
