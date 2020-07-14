@@ -15,11 +15,12 @@ class ReadCsv:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     file_path = row["file_path"]
+                    dir_path = row["dir_path"]
                     if file_path == "":
                         sg.popup_ok('原紙ファイルの設定が間違っています。\n設定をやり直してください。')
                         self.sf.select_file()
                     print("file_path={}".format(file_path))
-                    return file_path
+                    return file_path, dir_path
 
         except FileNotFoundError:
             sg.popup_ok("初期設定が必要です。\n次の画面で検査成績書原紙ファイルを選んでください")

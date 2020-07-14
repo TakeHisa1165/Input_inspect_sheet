@@ -7,13 +7,15 @@ import PySimpleGUI as sg
 import w_csv
 import xlwings as xw
 import input_to_inspectsheet
+import file_save
+import check_data
 
 
 class InputGui:
     """
     検査成績書入力用フォーム表示
     """
-    def __init__(self, file_path):
+    def __init__(self, file_path, dir_path):
         """
         入力用フォームの表示と原紙ファイルを開く
         :param file_path: path.csvから読み込んだ原紙のファイルパス
@@ -21,6 +23,9 @@ class InputGui:
         self.inspect_sheet_book = xw.Book(file_path)
         self.input_sheet = self.inspect_sheet_book.sheets('検査成績(完全簡易）本社向け')
         self.data_sheet = self.inspect_sheet_book.sheets("データ入力")
+        self.dir_path = dir_path
+        self.fs = file_save.FileSave(self.inspect_sheet_book, self.input_sheet, self.dir_path)
+
 
     def gui(self):
         # テーマ設定
@@ -68,6 +73,9 @@ class InputGui:
 
             if event == "実行":
                 value_dict = values
+                self.qty = values["-qty-"]
+                self.fs.new_file_save(values["-inspect_day-"])
+
 
                 if values["送る"]:
                     value_dict["send"] = "送る"
@@ -78,13 +86,19 @@ class InputGui:
                 # innput_to_inspectsheetのインスタンス
                 iti = input_to_inspectsheet.to_Inspectionsheet(value_dict, sheet=self.data_sheet)
                 iti.inpput_data()
+                cal_qty = iti.cal_qty
+                qty = self.qty
+                cd = check_data.CheckData(cal_qty, qty)
+                cd.check_qty()
+
 
             if event == "Excelファイル選択":
                 sf = SelectFile()
                 sf.select_file()
 
             if event == '途中保存':
-                print('test')
+                self.fs.save_file()
+
 
         window.close()
 
@@ -99,6 +113,8 @@ class SelectFile:
         layout = [
             [sg.Text(text='検査成績書の原紙ファイルを選択してください', font=('メイリオ', 14))],
             [sg.InputText(font=('メイリオ', 14), size=(50, 1), key="-path-"), sg.FileBrowse(button_text="開く", font=('メイリオ', 14))],
+            [sg.Text(text='作成した成績書の保存先フォルダを選択してください', font=('メイリオ', 14))],
+            [sg.InputText(font=('メイリオ', 14), size=(50, 1), key="-dir_path-"), sg.FolderBrowse(button_text="開く", font=('メイリオ', 14))],
             [sg.Submit(button_text="設定", font=('メイリオ', 14))]
         ]
 
@@ -113,6 +129,7 @@ class SelectFile:
             if event == "設定":
                 path_dict = {}
                 path_dict["file_path"] = values["-path-"]
+                path_dict["dir_path"] = values["-dir_path-"]
                 print(path_dict)
                 wcsv = w_csv.WriteCsv()
                 wcsv.write_csv(path_dict=path_dict)
